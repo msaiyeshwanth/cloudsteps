@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-flask-app
+  template:
+    metadata:
+      labels:
+        app: my-flask-app
+    spec:
+      containers:
+        - name: flask-app
+          image: gcr.io/final-project-444019/my-flask-app:latest
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/etc/secrets/gcp-key.json"
+          volumeMounts:
+            - name: gcp-key-volume
+              mountPath: /etc/secrets
+              readOnly: true
+      volumes:
+        - name: gcp-key-volume
+          secret:
+            secretName: gcp-key
