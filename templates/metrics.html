@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Apple Health Steps Insights</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        :root {
+            --background-light: #f9f9f9;
+            --background-dark: #121212;
+            --text-light: #000000;
+            --text-dark: #ffffff;
+            --primary-light: #ff453a;; /* Apple red */
+            --primary-dark: #ff453a;;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --highlight-light: gold;
+            --highlight-dark: gold;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--primary-dark);
+            color: var(--card-light);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        main {
+            padding: 1rem;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .chart-container {
+            margin-bottom: 2rem;
+            background-color: var(--card-dark);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .best-day {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            color: #ff453a;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Personal Apple Health Steps Insights</h1>
+    </header>
+    <main>
+        <div class="chart-container" id="weekly-chart-container">
+            <h2 class="chart-title">Weekly Steps</h2>
+            <div id="weekly-chart"></div>
+            <p class="best-day">Best Day in Week: {{ best_week_day.label }} with {{ best_week_day.value }} steps</p>
+        </div>
+
+        <div class="chart-container" id="monthly-chart-container">
+            <h2 class="chart-title">Monthly Steps</h2>
+            <div id="monthly-chart"></div>
+            <p class="best-day">Best Day in Month: {{ best_month_day.label }} with {{ best_month_day.value }} steps</p>
+        </div>
+
+        <div class="chart-container" id="yearly-chart-container">
+            <h2 class="chart-title">Yearly Steps</h2>
+            <div id="yearly-chart"></div>
+            <p class="best-day">Best Month in Year: {{ best_year_month.label }} with {{ best_year_month.value }} steps</p>
+        </div>
+    </main>
+    <footer>
+        &copy; Personal Apple Health Steps Insights.
+    </footer>
+    <script>
+        // Render charts with dark background and highlight best steps in orange
+        const weeklyChart = {{ weekly_chart | safe }};
+        weeklyChart.layout.plot_bgcolor = '#1e1e1e'; // Dark grey background for the plot area
+        weeklyChart.layout.paper_bgcolor = '#121212'; // Dark background for the whole plot area
+        weeklyChart.layout.font = { color: '#ffffff' }; // White text for the plot labels
+        weeklyChart.data[0].marker.color = 'orangered'; // Highlight the best day in orange color
+        Plotly.newPlot('weekly-chart', weeklyChart.data, weeklyChart.layout);
+
+        const monthlyChart = {{ monthly_chart | safe }};
+        monthlyChart.layout.plot_bgcolor = '#1e1e1e';
+        monthlyChart.layout.paper_bgcolor = '#121212';
+        monthlyChart.layout.font = { color: '#ffffff' };
+        monthlyChart.data[0].marker.color = 'orangered'; // Highlight the best day in orange color
+        Plotly.newPlot('monthly-chart', monthlyChart.data, monthlyChart.layout);
+
+        const yearlyChart = {{ yearly_chart | safe }};
+        yearlyChart.layout.plot_bgcolor = '#1e1e1e';
+        yearlyChart.layout.paper_bgcolor = '#121212';
+        yearlyChart.layout.font = { color: '#ffffff' };
+        yearlyChart.data[0].marker.color = 'orangered'; // Highlight the best month in orange color
+        Plotly.newPlot('yearly-chart', yearlyChart.data, yearlyChart.layout);
+    </script>
+</body>
+</html>
